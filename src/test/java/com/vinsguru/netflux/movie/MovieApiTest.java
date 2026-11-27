@@ -156,6 +156,14 @@ class MovieApiTest {
     }
 
     @Test
+    @DisplayName("Should treat LIKE wildcards in the title as literal characters")
+    void shouldTreatTitleWildcardsLiterally() {
+        var ids = getSummaryIds("/api/movies/search?title=god_ather");
+
+        assertThat(ids).isEmpty();
+    }
+
+    @Test
     @DisplayName("Should search by partial director ignoring case")
     void shouldSearchByDirector() {
         var ids = getSummaryIds("/api/movies/search?director=nolan");

@@ -41,7 +41,7 @@ public class MovieSpecifications {
     }
 
     private static Predicate containsIgnoreCase(CriteriaBuilder cb, Expression<String> column, String value) {
-        return cb.like(cb.lower(column), "%" + value.toLowerCase() + "%");
+        return cb.like(cb.lower(column), "%" + escapeLike(value.toLowerCase()) + "%", ESCAPE);
     }
 
     private static String escapeLike(String value) {
