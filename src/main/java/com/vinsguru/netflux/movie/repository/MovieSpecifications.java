@@ -6,12 +6,16 @@ import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Locale;
 import java.util.Objects;
 
-public class MovieSpecifications {
+public final class MovieSpecifications {
 
     private static final String DELIMITER = "\u001F";
     private static final char ESCAPE = '\\';
+
+    private MovieSpecifications() {
+    }
 
     public static Specification<Movie> hasTitle(String title) {
         return (root, query, cb) ->
@@ -35,13 +39,13 @@ public class MovieSpecifications {
             }
             var joined = cb.function("array_to_string", String.class, root.get("genres"), cb.literal(DELIMITER));
             var delimited = cb.concat(cb.concat(DELIMITER, cb.lower(joined)), DELIMITER);
-            var pattern = "%" + DELIMITER + escapeLike(genre.toLowerCase()) + DELIMITER + "%";
+            var pattern = "%" + DELIMITER + escapeLike(genre.toLowerCase(Locale.ROOT)) + DELIMITER + "%";
             return cb.like(delimited, pattern, ESCAPE);
         };
     }
 
     private static Predicate containsIgnoreCase(CriteriaBuilder cb, Expression<String> column, String value) {
-        return cb.like(cb.lower(column), "%" + escapeLike(value.toLowerCase()) + "%", ESCAPE);
+        return cb.like(cb.lower(column), "%" + escapeLike(value.toLowerCase(Locale.ROOT)) + "%", ESCAPE);
     }
 
     private static String escapeLike(String value) {

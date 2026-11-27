@@ -4,7 +4,10 @@ import com.vinsguru.netflux.movie.dto.MovieDetails;
 import com.vinsguru.netflux.movie.dto.MovieSummary;
 import com.vinsguru.netflux.movie.entity.Movie;
 
-public class MovieMapper {
+public final class MovieMapper {
+
+    private MovieMapper() {
+    }
 
     public static MovieSummary toSummary(Movie movie) {
         return new MovieSummary(

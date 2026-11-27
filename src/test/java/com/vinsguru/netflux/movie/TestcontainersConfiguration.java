@@ -3,6 +3,7 @@ package com.vinsguru.netflux.movie;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -13,6 +14,12 @@ class TestcontainersConfiguration {
 	@ServiceConnection
 	PostgreSQLContainer postgresContainer() {
 		return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"));
+	}
+
+	// Schema auto-update is for local dev and tests only; it must not be enabled in production.
+	@Bean
+	DynamicPropertyRegistrar schemaAutoUpdate() {
+		return registry -> registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
 	}
 
 }
